@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投标专家评审系统</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #343a40;
+        }
+
+        /* 导航栏样式 */
+        .navbar {
+            background-color: #343a40;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #f8f9fa;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .navbar a {
+            color: #f8f9fa;
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #adb5bd;
+        }
+
+        /* 主体内容样式 */
+        .hero {
+            background: linear-gradient(to right, #3a6073, #16222a);
+            padding: 60px 0;
+            color: #f8f9fa;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .hero a {
+            background-color: #17a2b8;
+            color: #f8f9fa;
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .hero a:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+
+        /* 功能介绍样式 */
+        .features {
+            display: flex;
+            justify-content: space-around;
+            padding: 60px 2rem;
+            background-color: #f8f9fa;
+        }
+
+        .feature-box {
+            text-align: center;
+            width: 30%;
+        }
+
+        .feature-box img {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        .feature-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-box p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* 页脚样式 */
+        .footer {
+            background-color: #343a40;
+            padding: 20px;
+            color: #f8f9fa;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #adb5bd;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        .footer a:hover {
+            color: #f8f9fa;
+        }
+
+        /* 头像样式 */
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #17a2b8;
+            display: inline-block;
+        }
+
+        /* 注销按钮样式 */
+        .logout-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #17a2b8;
+            color: #f8f9fa;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #138496;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 导航栏 -->
+<div class="navbar">
+    <h1>投标专家评审系统</h1>
+    <div>
+        <a href="#">首页</a>
+        <a href="#">关于我们</a>
+        <a href="#">联系</a>
+        <a href="#">帮助</a>
+    </div>
+</div>
+
+<!-- 主体内容 -->
+<div class="hero">
+    <h2>欢迎使用投标专家评审系统</h2>
+    <p>一个简洁高效的投标评审平台，为专家和管理员提供便捷的管理和评审工具。</p>
+    <a href="#" id="user-avatar">登录</a>
+</div>
+
+<!-- 功能介绍 -->
+<div class="features">
+    <div class="feature-box">
+        <img src="https://via.placeholder.com/80" alt="专家管理">
+        <h3>专家管理</h3>
+        <p>管理员可以方便地管理专家信息，查看专家评分进度，并对专家进行分配。</p>
+    </div>
+    <div class="feature-box">
+        <img src="https://via.placeholder.com/80" alt="项目管理">
+        <h3>项目管理</h3>
+        <p>系统提供详细的项目管理功能，包括项目创建、编辑、和分数设定。</p>
+    </div>
+    <div class="feature-box">
+        <img src="https://via.placeholder.com/80" alt="评分统计">
+        <h3>评分统计</h3>
+        <p>专家可以对项目进行分类打分，系统将自动统计并生成评审报告。</p>
+    </div>
+</div>
+
+<!-- 注销按钮 -->
+<button class="logout-button" id="logout-button">注销</button>
+
+<!-- 页脚 -->
+<div class="footer">
+    <p>© 2024 投标专家评审系统. 版权所有. | <a href="#">隐私政策</a> | <a href="#">使用条款</a></p>
+</div>
+
+<script>
+    function logout() {
+        fetch('/user/logout', { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 清除本地存储
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('avatarUrl');
+                    // 重定向到首页
+                    window.location.href = '/';
+                } else {
+                    alert('注销失败，请稍后再试。');
+                }
+            })
+            .catch(error => {
+                console.error('注销错误:', error);
+                alert('注销请求失败，请稍后再试。');
+            });
+    }
+    // 刷新访问令牌
+    function refreshAccessToken() {
+        return fetch('/refresh-token', {
+            method: 'POST',
+            credentials: 'include' // 确保发送 HTTP-only Cookie
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.accessToken) {
+                    localStorage.setItem('accessToken', data.accessToken);
+                    return data;
+                } else {
+                    throw new Error('Failed to refresh access token');
+                }
+            })
+            .catch(error => {
+                console.error('Error refreshing token:', error);
+                // 可能需要重定向到登录页
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('avatarUrl');
+                window.location.href = '/';
+            });
+    }
+    async function fetchProtectedResource() {
+        const accessToken = localStorage.getItem('accessToken');
+        try {
+            const response = await fetch('/protected/verify', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Protected resource data:', data);
+            } else if (response.status === 401) {
+                // 处理访问令牌过期或无效的情况
+                console.log('Access token is invalid or expired. Attempting to refresh...');
+                await refreshAccessToken();
+            } else {
+                console.error('Failed to fetch protected resource:', response.status);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const avatarUrl = localStorage.getItem('avatarUrl');
+        const accessToken = localStorage.getItem('accessToken');
+
+        const userAvatarElement = document.getElementById('user-avatar');
+
+        if (accessToken) {
+
+            fetchProtectedResource()
+
+            // 用户已登录，显示头像
+            userAvatarElement.innerHTML = `<img src="${avatarUrl}" class="avatar">`;
+            userAvatarElement.href = '#'; // 头像不再是链接
+            userAvatarElement.style.cursor = 'default'; // 头像点击不会有动作
+            userAvatarElement.style.background = 'none'; // 确保背景样式被移除
+            userAvatarElement.style.padding = '0'; // 确保没有内边距
+            userAvatarElement.style.border = 'none'; // 确保没有边框
+
+
+        } else {
+            // 用户未登录，显示登录按钮
+            userAvatarElement.innerText = '登录';
+            userAvatarElement.href = '/user/login';
+            userAvatarElement.style.cursor = 'pointer'; // 头像点击会有动作
+        }
+
+        // 处理注销按钮点击事件
+
+        document.getElementById('logout-button').addEventListener('click', logout);
+    });
+</script>
+
+</body>
+</html>
